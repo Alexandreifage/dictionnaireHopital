@@ -1,7 +1,10 @@
 package main;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import autres.Immeuble;
 import autres.Lit;
 import autres.Medicament;
@@ -236,8 +239,8 @@ public class MainHopital {
 		System.out.println("ordinateur IM, mémoire : " + ordinateurs.get("IM").getMemoire() + " gigas.");
 
 		System.out.println();
-		System.out.println("Lits");
-		System.out.println("====");
+		System.out.println("Lits :");
+		System.out.println("======");
 		System.out.println();
 
 		// création liste lits
@@ -263,7 +266,7 @@ public class MainHopital {
 		Lit lit17 = new Lit(17, false, true, false);
 		Lit lit18 = new Lit(18, true, true, false);
 		Lit lit19 = new Lit(19, false, true, false);
-		Lit lit20 = new Lit(10, true, true, false);
+		Lit lit20 = new Lit(20, true, true, false);
 
 		// ajout à la liste lits
 		lstLits.add(lit01);
@@ -288,29 +291,74 @@ public class MainHopital {
 		lstLits.add(lit20);
 
 		// Creation du dictionnaire des lits pour attribution par chambre
-		HashMap<String, Lit> litsChambre = new HashMap<String, Lit>();
+		HashMap<String, Set<Lit>> litsChambre = new HashMap<String, Set<Lit>>();
+		
+		Set<Lit> litsChambre34 = new HashSet<Lit>();
+		litsChambre34.add(lit01);
+		litsChambre34.add(lit04);
+		litsChambre34.add(lit05);
+		litsChambre34.add(lit07);
+		litsChambre34.add(lit09);
+		litsChambre34.add(lit11);
+		litsChambre34.add(lit12);
+		litsChambre34.add(lit15);
+		litsChambre34.add(lit17);
+		litsChambre34.add(lit19);
+		
+		Set<Lit> litsChambre19 = new HashSet<Lit>();
+		litsChambre19.add(lit02);
+		litsChambre19.add(lit06);
+		litsChambre19.add(lit10);
+		litsChambre19.add(lit13);
+		litsChambre19.add(lit16);
+		
+		Set<Lit> litsChambre67 = new HashSet<Lit>();
+		litsChambre67.add(lit03);
+		litsChambre67.add(lit08);
+		litsChambre67.add(lit14);
+		litsChambre67.add(lit18);
+		litsChambre67.add(lit20);
 
-		litsChambre.put("34", lit01);
-		litsChambre.put("19", lit02);
-		litsChambre.put("67", lit03);
-		litsChambre.put("34", lit04);
-		litsChambre.put("34", lit05);
-		litsChambre.put("19", lit06);
-		litsChambre.put("34", lit07);
-		litsChambre.put("67", lit08);
-		litsChambre.put("34", lit09);
-		litsChambre.put("19", lit10);
-		litsChambre.put("34", lit11);
-		litsChambre.put("34", lit12);
-		litsChambre.put("19", lit13);
-		litsChambre.put("67", lit14);
-		litsChambre.put("34", lit15);
-		litsChambre.put("19", lit16);
-		litsChambre.put("34", lit17);
-		litsChambre.put("67", lit18);
-		litsChambre.put("34", lit19);
-		litsChambre.put("67", lit20);
+		litsChambre.put("34", litsChambre34);
+		litsChambre.put("19", litsChambre19);
+		litsChambre.put("67", litsChambre67);
+		
+		System.out.println("================");
+		Set<String> numeroChambres = litsChambre.keySet();
+		for (String s : numeroChambres) {
+			System.out.println(s);
+			Set<Lit> lits = litsChambre.get(s);
+			for (Lit l: lits) {
+				System.out.println("-- " + l.getNo());
+			}
 
+		}
+		System.out.println("================");
+		
+		//méthode pour trouver le lit dans quelle chambre
+		String noLit = "10";
+		String noChambre = chuv.chercherChambrePourLit(litsChambre, noLit);
+		
+		System.out.println("Où se trouve le lit");
+		System.out.println("===================");
+		System.out.println("Numéro de chambre : " + noChambre);
+		System.out.println();
+	
+
+		System.out.println("Lits par chambre");
+		System.out.println("================");
+		// Displaying the size of the map 
+        System.out.println("Il y a " + litsChambre.size() + " chambre(s) dans le dictionnaire litsChambre."); 
+        System.out.println("Ce sont les chambres : " + litsChambre.keySet());
+        System.out.println(litsChambre.containsValue(lit01));
+		System.out.println(litsChambre.get("34"));
+		System.out.println(litsChambre.get("67"));
+		System.out.println("Lits dans la chambre 19");
+		System.out.println("=======================");
+	
+		System.out.println("******************");
+		
+				
 		System.out.println("Lits par type");
 		System.out.println("=============");
 		
@@ -391,7 +439,6 @@ public class MainHopital {
 		System.out.println("Non médicalisés avec barrière pour adultes : " + nbreLitsNMBA + " lits.");
 		System.out.println("Non médicalisés sans barrière pour adultes : " + nbreLitsNMsBA + " lits.");
 		System.out.println();
-		
 		
 		// fin nouveau code Alexandre
 
@@ -524,7 +571,27 @@ public class MainHopital {
 		//t1.
 		String nomMedicament = new String("Paracétamol");
 		//nomMedicament.
+
 		
+		
+	}
+	
+	public String chercherChambrePourLit(HashMap<String, Set<Lit>> chambres, String noLit) {
+		
+		int no = Integer.parseInt(noLit);
+		Set<String> numeroChambres = chambres.keySet();
+		for (String s : numeroChambres) {
+			//System.out.println(s);
+			Set<Lit> lits = chambres.get(s);
+			for (Lit l: lits) {
+				//System.out.println("-- " + l.getNo());
+				if (no == l.getNo()) {
+					return s;
+				}
+			}
+		
+		}
+		return "pas de lit trouvé";
 		
 	}
 	
