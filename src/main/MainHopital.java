@@ -13,6 +13,7 @@ import autres.StockMedicaments;
 import horaires.HoraireTravail;
 import personnes.Medecin;
 import personnes.Patient;
+import personnes.Personne;
 import local.Chambre;
 import soins.Operation;
 import soins.Soin;
@@ -34,6 +35,7 @@ public class MainHopital {
 		// nouveau medecin
 		Medecin medecin1 = new Medecin(345, "Schmidt", "Laurent", "Blvd Carl-Vogt 9", "13.5.92", "078 555 66 77",
 				"lschmidt@yahoo.com", "ORL");
+		
 
 		// création de la liste de patients ne contenant que des String
 		ArrayList<String> patients = new ArrayList<String>();
@@ -177,6 +179,11 @@ public class MainHopital {
 		chuv.afficherStockMedicaments2(sm);
 
 		// zzzztttt
+		
+		//appel méthode foot
+		System.out.println("Football");
+		System.out.println("========");
+		creerEquipeFoot();
 
 		// nouveau code Alexandre
 
@@ -552,6 +559,21 @@ public class MainHopital {
 		}
 		
 		
+	}
+	
+	public static void creerEquipeFoot() {
+		Personne[] equipe11 = new Personne[11];
+		// affichage du tableau des joueurs de foot
+		System.out.println("Equipe de Foot");
+		System.out.println("==============");
+		//Medecin medecin1 = new Medecin ();
+		for (int i = 0; i < equipe11.length; i = i + 1) {
+			Personne joueur = equipe11[i];
+			System.out.println(joueur);
+			
+		}
+		System.out.println("==============");
+
 	}
 	
 	public void afficherStockMedicaments2(StockMedicaments stock) {
