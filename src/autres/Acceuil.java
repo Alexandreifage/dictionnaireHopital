@@ -25,5 +25,5 @@ public class Acceuil {
   public void setNoService(int noService) {
     this.noService = noService;
   }
-
+// comment by alexandre
 }
