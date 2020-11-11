@@ -6,6 +6,10 @@ public class Administratif extends Personne {
 
   private String service;
   private String specialite;
+  
+  public Administratif(String nom) throws PatientException {
+	    super(nom);
+  }
 
   public Administratif(int no, String nom, String prenom, String adresse,
       String dateNaissance, String telephone, String email, String service,

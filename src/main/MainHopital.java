@@ -1,4 +1,5 @@
 package main;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,6 +12,8 @@ import autres.Medicament;
 import autres.Ordinateur;
 import autres.StockMedicaments;
 import horaires.HoraireTravail;
+import personnes.Administratif;
+import personnes.Infirmier;
 import personnes.Medecin;
 import personnes.Patient;
 import personnes.Personne;
@@ -25,6 +28,8 @@ public class MainHopital {
 	// Création de tableau
 	// déclaration du tableau de médicaments (peut en accepter 5)
 
+	
+
 	public static void main(String[] args) throws Exception {
 
 		// code Main Alexandre
@@ -35,7 +40,6 @@ public class MainHopital {
 		// nouveau medecin
 		Medecin medecin1 = new Medecin(345, "Schmidt", "Laurent", "Blvd Carl-Vogt 9", "13.5.92", "078 555 66 77",
 				"lschmidt@yahoo.com", "ORL");
-		
 
 		// création de la liste de patients ne contenant que des String
 		ArrayList<String> patients = new ArrayList<String>();
@@ -179,11 +183,45 @@ public class MainHopital {
 		chuv.afficherStockMedicaments2(sm);
 
 		// zzzztttt
-		
-		//appel méthode foot
+
+		// Football
+		System.out.println();
 		System.out.println("Football");
 		System.out.println("========");
-		creerEquipeFoot();
+		
+		
+		// news
+		Medecin medecin2 = new Medecin("Robert");// 1
+		Medecin medecin3 = new Medecin("Bobby");// 2
+		Medecin medecin4 = new Medecin("Rockford");// 3
+		Administratif administratif1 = new Administratif("Robert");// 4
+		Administratif administratif2 = new Administratif("Henri");// 5
+		Administratif administratif3 = new Administratif("Zizou");// 6
+		Infirmier infirmier1 = new Infirmier("Jojo");// 7
+		Infirmier infirmier2 = new Infirmier("Bebert");// 8
+		Infirmier infirmier3 = new Infirmier("Chapuisat");// 9
+		Medecin medecin5 = new Medecin("Yvan");// 10
+		Medecin medecin6 = new Medecin("Vladimir");// 11
+		
+		// création de la liste listeJoueursFoot
+		ArrayList<Personne> listeJoueursFoot = new ArrayList<>();
+		
+		// ajout des instances à la liste listeJoueursFoot
+		listeJoueursFoot.add(medecin2);
+		listeJoueursFoot.add(medecin3);
+		listeJoueursFoot.add(medecin4);
+		listeJoueursFoot.add(medecin5);
+		listeJoueursFoot.add(medecin6);
+		listeJoueursFoot.add(administratif1);
+		listeJoueursFoot.add(administratif2);
+		listeJoueursFoot.add(administratif3);
+		listeJoueursFoot.add(infirmier1);
+		listeJoueursFoot.add(infirmier2);
+		listeJoueursFoot.add(infirmier3);
+		
+		// appel de la méthode listeJoueursFoot
+		creerEquipeFoot(listeJoueursFoot);
+		// Ajout des personnes au tableauMedicaments
 
 		// nouveau code Alexandre
 
@@ -274,8 +312,9 @@ public class MainHopital {
 		Lit lit18 = new Lit(18, true, true, false);
 		Lit lit19 = new Lit(19, false, true, false);
 		Lit lit20 = new Lit(20, true, true, false);
+		Lit lit21 = new Lit(21, true, false, false);
 
-		// ajout à la liste lits
+		// ajout des instances Lit à la liste lstLits
 		lstLits.add(lit01);
 		lstLits.add(lit02);
 		lstLits.add(lit03);
@@ -296,12 +335,14 @@ public class MainHopital {
 		lstLits.add(lit18);
 		lstLits.add(lit19);
 		lstLits.add(lit20);
+		lstLits.add(lit21);
 
-		// Creation du dictionnaire des lits pour attribution par chambre
+		// Creation du dictionnaire des lits pour attribution par 3 listes de lits des lits
 		HashMap<String, Set<Lit>> litsChambre = new HashMap<String, Set<Lit>>();
-		
+
+		// Création et ajouts des lits dans la liste litsChambre34
 		Set<Lit> litsChambre34 = new HashSet<Lit>();
-		litsChambre34.add(lit01);
+				litsChambre34.add(lit01);
 		litsChambre34.add(lit04);
 		litsChambre34.add(lit05);
 		litsChambre34.add(lit07);
@@ -311,14 +352,16 @@ public class MainHopital {
 		litsChambre34.add(lit15);
 		litsChambre34.add(lit17);
 		litsChambre34.add(lit19);
-		
+
+		// Création et ajouts des lits dans la liste litsChambre19
 		Set<Lit> litsChambre19 = new HashSet<Lit>();
 		litsChambre19.add(lit02);
 		litsChambre19.add(lit06);
 		litsChambre19.add(lit10);
 		litsChambre19.add(lit13);
 		litsChambre19.add(lit16);
-		
+
+		// Création et ajouts des lits dans la liste litsChambre67
 		Set<Lit> litsChambre67 = new HashSet<Lit>();
 		litsChambre67.add(lit03);
 		litsChambre67.add(lit08);
@@ -326,49 +369,73 @@ public class MainHopital {
 		litsChambre67.add(lit18);
 		litsChambre67.add(lit20);
 
+		// ajout des listes litsChambre** dans le dictionnaire litsChambre
 		litsChambre.put("34", litsChambre34);
 		litsChambre.put("19", litsChambre19);
 		litsChambre.put("67", litsChambre67);
-		
-		System.out.println("================");
+			
+		System.out.println("affichage des numéros de lits par clé chambre du dictionnaire litsChambre");
+		System.out.println("=========================================================================");
 		Set<String> numeroChambres = litsChambre.keySet();
 		for (String s : numeroChambres) {
 			System.out.println(s);
 			Set<Lit> lits = litsChambre.get(s);
-			for (Lit l: lits) {
+			for (Lit l : lits) {
 				System.out.println("-- " + l.getNo());
 			}
 
 		}
-		System.out.println("================");
-		
-		//méthode pour trouver le lit dans quelle chambre
+		System.out.println();
+
+		// appel de la méthode chercherChambrePourLit pour trouver dans quelle chambre se trouve un lit
 		String noLit = "10";
 		String noChambre = chuv.chercherChambrePourLit(litsChambre, noLit);
-		
-		System.out.println("Où se trouve le lit");
-		System.out.println("===================");
-		System.out.println("Numéro de chambre : " + noChambre);
-		System.out.println();
-	
 
-		System.out.println("Lits par chambre");
-		System.out.println("================");
-		// Displaying the size of the map 
-        System.out.println("Il y a " + litsChambre.size() + " chambre(s) dans le dictionnaire litsChambre."); 
-        System.out.println("Ce sont les chambres : " + litsChambre.keySet());
-        System.out.println(litsChambre.containsValue(lit01));
-		System.out.println(litsChambre.get("34"));
-		System.out.println(litsChambre.get("67"));
-		System.out.println("Lits dans la chambre 19");
-		System.out.println("=======================");
-	
-		System.out.println("******************");
+		System.out.println("Où se trouve le lit " + noLit + " ?");
+		System.out.println("========================");
+		System.out.println("Le lit " + noLit + " se trouve dans la chambre : " + noChambre);
+		System.out.println();
+
+		//
+
+		System.out.println("Liste des chambres");
+		System.out.println("===================");
+		// Displaying details of the map
+		System.out.println("Il y a " + litsChambre.size() + " chambre(s) dans le dictionnaire litsChambre.");
+		System.out.println("Ce sont les chambres : " + litsChambre.keySet());
+		System.out.println();
 		
-				
+		deplacerLitChambre(litsChambre34, lit11, litsChambre67);
+		
+		System.out.println("lits par chambre après déplacement lit");
+		System.out.println("======================================");
+		for (String s : numeroChambres) {
+			System.out.println(s);
+			Set<Lit> lits = litsChambre.get(s);
+			for (Lit l : lits) {
+				System.out.println("-- " + l.getNo());
+			}
+		}
+		System.out.println();
+		
+		System.out.println("Lits qui trainent dans les corridors");
+		System.out.println("====================================");
+		for (int i = 0; i < lstLits.size(); i++) {
+
+		if (litsChambre19.contains(lstLits.get(i)) || litsChambre34.contains(lstLits.get(i)) || litsChambre67.contains(lstLits.get(i))) {
+			//System.out.println("le lit : " + lstLits.get(i).getNo()	+ " est dans une chambre");		
+		} else {
+			System.out.println("Le lit " + lstLits.get(i).getNo() + " traine dans les corridors");
+		}
+		
+		}
+		
+		
+		
+		System.out.println();
+
 		System.out.println("Lits par type");
 		System.out.println("=============");
-		
 
 		// affichage par la lstLits du nombre de lits par type
 
@@ -446,7 +513,7 @@ public class MainHopital {
 		System.out.println("Non médicalisés avec barrière pour adultes : " + nbreLitsNMBA + " lits.");
 		System.out.println("Non médicalisés sans barrière pour adultes : " + nbreLitsNMsBA + " lits.");
 		System.out.println();
-		
+
 		// fin nouveau code Alexandre
 
 		// fin code Main Alexandre
@@ -544,78 +611,84 @@ public class MainHopital {
 		System.out.println("fin du programme");
 
 	}
-	
-	
-	
+
 	public static void afficherStockMedicaments(StockMedicaments stock) {
 		System.out.println("");
 		System.out.println("liste des medicaments");
 		System.out.println("=====================");
 		if (stock != null) {
-			
+
 			for (String i : stock.listerNomMedicaments()) {
 				System.out.println(i);
 			}
 		}
-		
-		
+
 	}
-	
-	public static void creerEquipeFoot() {
-		Personne[] equipe11 = new Personne[11];
+
+	// méthode pour déplacer un lit d'une chambre à l'autre
+	public static void deplacerLitChambre(Set<Lit> setLitaSupprimer, Lit litaDeplacer, Set<Lit> setLitaAcceuiller) {
+		setLitaSupprimer.remove(litaDeplacer);
+		setLitaAcceuiller.add(litaDeplacer);
+
+	}
+
+	public static void creerEquipeFoot(ArrayList<Personne> lstPersonnes) {
 		// affichage du tableau des joueurs de foot
 		System.out.println("Equipe de Foot");
 		System.out.println("==============");
-		//Medecin medecin1 = new Medecin ();
-		for (int i = 0; i < equipe11.length; i = i + 1) {
-			Personne joueur = equipe11[i];
-			System.out.println(joueur);
-			
+		// création du tableau equipe11 avec 11 cases 
+		Personne[] equipe11 = new Personne[11];
+		// parcourt la liste lstPersonnes et les attribue au tableau equipe11
+		for (int i = 0; i < lstPersonnes.size(); i++) {
+			equipe11[i] = lstPersonnes.get(i);
 		}
-		System.out.println("==============");
-
+		// affiche les valeurs du tableau equipe11
+		for (int i = 0; i< equipe11.length; i++) {
+			System.out.println(equipe11[i].getNom());
+		}
+		
+		System.out.println("fin de la méthode creerEquipeFoot");
 	}
-	
+
 	public void afficherStockMedicaments2(StockMedicaments stock) {
 		System.out.println("");
 		System.out.println("liste des medicaments");
 		System.out.println("=====================");
 		if (stock != null) {
-			
+
 			for (String i : stock.listerNomMedicaments()) {
 				System.out.println(i);
 			}
-		}		
+		}
 	}
-	
+
 	public void gererTraitements() {
 		Traitement t1 = new Traitement(23, 45, 76, 87, 89);
-		//t1.
+		// t1.
 		String nomMedicament = new String("Paracétamol");
-		//nomMedicament.
+		// nomMedicament.
 
-		
-		
 	}
 	
+	// méthode pour trouver dans quelle chambre se trouve un lit
+	// avec en premier argument le dictionnaire et en deuxième le numéro de lit
 	public String chercherChambrePourLit(HashMap<String, Set<Lit>> chambres, String noLit) {
 		
+		// assignation de noLit à no après l'avoir returner en  integer
 		int no = Integer.parseInt(noLit);
+		// recopié de la ligne 379
 		Set<String> numeroChambres = chambres.keySet();
 		for (String s : numeroChambres) {
-			//System.out.println(s);
 			Set<Lit> lits = chambres.get(s);
-			for (Lit l: lits) {
-				//System.out.println("-- " + l.getNo());
+			for (Lit l : lits) {
 				if (no == l.getNo()) {
 					return s;
 				}
 			}
-		
+
 		}
-		return "pas de lit trouvé";
-		
+		return "pas de lit trouvé !";
+
 	}
-	
 
 }

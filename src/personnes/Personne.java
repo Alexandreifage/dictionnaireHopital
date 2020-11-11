@@ -13,6 +13,10 @@ public abstract class Personne  {
   private String dateNaissance;
   private String telephone;
   private String email;
+  
+  public Personne(String nom) {
+	  this.nom = nom;
+  }
 
   public Personne(int no, String nom, String prenom, String adresse,
       String dateNaissance, String telephone, String email)
@@ -27,6 +31,8 @@ public abstract class Personne  {
     if ((nom == null)) {
       throw new PatientException("Nom est null");
     }
+    
+    
     
     if ((nom.trim().length() > 1) && (prenom.trim().length() > 1)) {
       this.no = no;
@@ -99,4 +105,6 @@ public abstract class Personne  {
   public void setEmail(String email) {
     this.email = email;
   }
+  
+ 
 }
