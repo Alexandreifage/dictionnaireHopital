@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import autres.Immeuble;
 import autres.Lit;
 import autres.Medicament;
@@ -22,16 +21,27 @@ import soins.Operation;
 import soins.Soin;
 import misc.*;
 import autres.Traitement;
+import java.sql.Connection;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
+
 
 public class MainHopital {
-
-	// Création de tableau
-	// déclaration du tableau de médicaments (peut en accepter 5)
 
 	
 
 	public static void main(String[] args) throws Exception {
-
+		
+		
+		
+		MainHopital mh = new MainHopital();
+		List<Infirmier> infirmiers = mh.retrieveInfirmiers();
+	
+		
+		
 		// code Main Alexandre
 		/// zzzzttttzzzz
 
@@ -202,6 +212,18 @@ public class MainHopital {
 		Infirmier infirmier3 = new Infirmier("Chapuisat");// 9
 		Medecin medecin5 = new Medecin("Yvan");// 10
 		Medecin medecin6 = new Medecin("Vladimir");// 11
+		
+		//infimier pour database
+		Infirmier infirmier4 = new Infirmier(4, "Diaz", "Henri", "rue des Martines 15", "12.04.1993", "0794786523", "hdiaz@gmail.com", "Pédiatrie");
+		Infirmier infirmier5 = new Infirmier(5, "Lopez", "Charles", "rue des Bains 22", "12.02.1965", "0797653465", "clopez@gmail.com", "Ophtalmologie");
+		
+		mh.createInfirmier(infirmier4);
+		mh.createInfirmier(infirmier5);
+		mh.updateInfirmier(infirmier5);
+		mh.deleteInfirmier(infirmier4);
+		//retrieve l0infirmier qui a l'ID 3 dans la database
+		mh.retrieveInfirmierUnique(3);
+		
 		
 		// création de la liste listeJoueursFoot
 		ArrayList<Personne> listeJoueursFoot = new ArrayList<>();
@@ -670,6 +692,250 @@ public class MainHopital {
 
 	}
 	
+	
+	// méthode pour deleter éléments de la database
+	private boolean deleteInfirmier(Infirmier infirmier) {
+		Connection connection;
+		ResultSet rs = null;
+		Statement stmt = null;
+		boolean resultat = false;
+		if (infirmier == null) {
+			return resultat;
+		}
+		
+		try {
+			// pour interagir avec la base de données
+			Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost/Hopital?user=javauser" + "&password=javapass");         
+            stmt = connection.createStatement();
+      
+            
+            String sqlString = "DELETE FROM Hopital.tblInfirmier WHERE email = '" + infirmier.getEmail() +"'";
+        			
+            
+            int nbrModifs = stmt.executeUpdate(sqlString);
+            resultat = nbrModifs < 0 ? true : false;
+        			
+           
+            stmt.close();
+            
+        } catch (Exception ex) {
+        	ex.printStackTrace();
+            
+        } 
+		
+		return resultat;
+        				
+
+	}
+	
+	
+	private boolean updateInfirmier(Infirmier infirmier) {
+		Connection connection;
+		ResultSet rs = null;
+		Statement stmt = null;
+		boolean resultat = false;
+		if (infirmier == null) {
+			return resultat;
+		}
+		
+		try {
+
+			Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost/Hopital?user=javauser" + "&password=javapass");         
+            stmt = connection.createStatement();
+            
+            String sqlString = "UPDATE Hopital.tblInfirmier SET adresse = 'rue des Etuves 55' WHERE email = '" + infirmier.getEmail() +"'";
+            //String sqlString = "UPDATE Hopital.tblInfirmier SET adresse = '15 BLVD Tell' WHERE email = " + infirmier.getEmail();
+        	// UPDATE `Hopital`.`tblInfirmier` SET `prenom` = 'José' WHERE (`noInfirmier` = '5');	
+            
+            System.out.println("Sql String : " + sqlString);
+            int nbrModifs = stmt.executeUpdate(sqlString);
+            resultat = nbrModifs < 0 ? true : false;
+        			
+            System.out.print("enregistrement réussi ? :" + resultat);
+           
+            stmt.close();
+            
+        } catch (Exception ex) {
+        	ex.printStackTrace();
+            
+        } 
+		
+		return resultat;
+        				
+
+	}
+	//méthode pour insérer dans database
+	private boolean createInfirmier(Infirmier infirmier) {
+		//variables
+		Connection connection;
+		ResultSet rs = null;
+		Statement stmt = null;
+		boolean resultat = false;
+		
+		if (infirmier == null) {
+			return resultat;
+		}
+		
+		try {
+			// pour interagir avec la base de données
+			Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost/Hopital?user=javauser" + "&password=javapass");         
+            stmt = connection.createStatement();
+            
+            String sqlString = "INSERT INTO Hopital.tblInfirmier (nom, prenom, adresse, dateNaissance, telephone, email, specialite) " + 
+        			"VALUES ('" + infirmier.getNom() + "', '" +
+        			infirmier.getPrenom() + "', '" +
+        			infirmier.getAdresse() + "', '" +
+        			infirmier.getDateNaissance() + "', '" +
+        			infirmier.getTelephone() + "', '" +
+        			infirmier.getEmail() + "', '" +
+        			infirmier.getSpecialite() +"')" ;
+            
+            int nbrModifs = stmt.executeUpdate(sqlString);
+            resultat = nbrModifs < 0 ? true : false;
+        			
+           
+            stmt.close();
+            
+        } catch (Exception ex) {
+        	ex.printStackTrace();
+            
+        } 
+		
+		return resultat;
+        				
+
+	}// méthode pour retriever de la database un infirmier unique
+private Infirmier retrieveInfirmierUnique(int noInfirmier) {
+		
+		Connection connection;
+		ResultSet rs = null;
+		Statement stmt = null;
+		
+		
+		try {
+			// pour interagir avec la base de données
+			Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost/Hopital?user=javauser" + "&password=javapass");
+            
+            stmt = connection.createStatement();
+            //execution de la table SQL
+            rs = stmt.executeQuery("SELECT * FROM tblInfirmier WHERE noInfirmier = '" + noInfirmier + "'");
+            
+            
+            System.out.println("-----------------------------------------");
+           
+            
+             List<Infirmier> lstInfirmierUnique = new ArrayList<>();
+            //tant qu'il y a des suivants dans la les éléments que nous a retournés la database
+             while (rs.next())   {
+
+            	System.out.println(rs.getString(2));
+            	Infirmier inf = new Infirmier(
+            			rs.getInt(1),
+            			rs.getString(2),
+            			rs.getString(3),
+            			rs.getString(4),
+            			rs.getString(5),
+            			rs.getString(6),
+            			rs.getString(7),
+            			rs.getString(8));
+            	
+            	lstInfirmierUnique.add(inf);
+            	
+             }
+ 
+       	
+            System.out.println("-----------------------------------------");
+      
+            System.out.println("-----------------------------------------");
+            
+            rs.close();
+            stmt.close();
+            
+            
+            System.out.println("Infirmier récupéré depuis la base de données (on est dans la méthode retrieveInfirmierUnique) : " + lstInfirmierUnique.get(0));
+            
+            return lstInfirmierUnique.get(0);
+            
+            
+            
+            
+        } catch (Exception ex) {
+        	ex.printStackTrace();
+            
+        } 
+		
+		return null;
+
+	}
+	
+	private List<Infirmier> retrieveInfirmiers() {
+		
+		Connection connection;
+		ResultSet rs = null;
+		Statement stmt = null;
+		List<Infirmier> listeInfirmier = new ArrayList<>();
+		
+		try {
+			// pour interagir avec la base de données
+			Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost/Hopital?user=javauser" + "&password=javapass");
+            
+            stmt = connection.createStatement();
+            rs = stmt.executeQuery("SELECT * FROM tblInfirmier");
+            
+            System.out.println("-----------------------------------------");
+            
+            //tant qu'il y a des suivants dans la les éléments que nous a retournés la database
+            while (rs.next()) {
+            	System.out.println(rs.getString(2));
+            	Infirmier inf = new Infirmier(
+            			rs.getInt(1),
+            			rs.getString(2),
+            			rs.getString(3),
+            			rs.getString(4),
+            			rs.getString(5),
+            			rs.getString(6),
+            			rs.getString(7),
+            			rs.getString(8));
+            	
+            	listeInfirmier.add (inf);
+            	
+            	}
+            System.out.println("-----------------------------------------");
+            for (int i = 0 ; i < listeInfirmier.size(); i++) {
+        		System.out.print(listeInfirmier.get(i).getNo() + " ");
+        		System.out.print(listeInfirmier.get(i).getPrenom() + " ");
+        		System.out.print(listeInfirmier.get(i).getNom() + " ");
+        		System.out.print(listeInfirmier.get(i).getAdresse() + " ");
+        		System.out.print(listeInfirmier.get(i).getDateNaissance() + " ");
+        		System.out.print(listeInfirmier.get(i).getEmail() + " ");
+        		System.out.println(listeInfirmier.get(i).getSpecialite() + " ");
+
+            }
+            // System.out.println(listeInfirmier.size());
+            
+            
+            
+            System.out.println("-----------------------------------------");
+            
+            rs.close();
+            stmt.close();
+            
+        } catch (Exception ex) {
+        	ex.printStackTrace();
+            
+        } 
+		
+		return listeInfirmier;
+		
+		
+		
+	}
+	
 	// méthode pour trouver dans quelle chambre se trouve un lit
 	// avec en premier argument le dictionnaire et en deuxième le numéro de lit
 	public String chercherChambrePourLit(HashMap<String, Set<Lit>> chambres, String noLit) {
@@ -678,9 +944,12 @@ public class MainHopital {
 		int no = Integer.parseInt(noLit);
 		// recopié de la ligne 379
 		Set<String> numeroChambres = chambres.keySet();
+		
 		for (String s : numeroChambres) {
-			Set<Lit> lits = chambres.get(s);
-			for (Lit l : lits) {
+			System.out.println("affichage du numéro de chambre (affichage de s)" + s);
+			System.out.println("affichage du chambres.get(s) " + chambres.get(s));
+			Set<Lit> noLits = chambres.get(s);
+			for (Lit l : noLits) {
 				if (no == l.getNo()) {
 					return s;
 				}
@@ -692,3 +961,6 @@ public class MainHopital {
 	}
 
 }
+	
+	
+

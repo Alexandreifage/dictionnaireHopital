@@ -1,2 +1,3 @@
-module HopitalGit {
+open module HopitalGit {
+	requires java.sql;
 }
