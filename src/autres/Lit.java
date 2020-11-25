@@ -13,6 +13,13 @@ public class Lit {
     this.barriere = barriere;
     this.enfant = enfant;
   }
+  
+  public Lit(boolean medicalise, boolean barriere, boolean enfant) {
+	    
+	    this.medicalise = medicalise;
+	    this.barriere = barriere;
+	    this.enfant = enfant;
+	  }
 
   public int getNo() {
     return no;

@@ -11,6 +11,7 @@ public final class Chambre extends Local {
     this.nbrLits = nbrLits;
     this.prive = prive;
   }
+  
 
   public int getNbrLits() {
     return nbrLits;

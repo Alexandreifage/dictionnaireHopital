@@ -21,6 +21,9 @@ import soins.Operation;
 import soins.Soin;
 import misc.*;
 import autres.Traitement;
+import database.DataBaseConnection;
+import database.LazySingleton;
+
 import java.sql.Connection;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -36,9 +39,33 @@ public class MainHopital {
 	public static void main(String[] args) throws Exception {
 		
 		
+		System.out.println("Démarrage du programme");
+        System.out.println("Mon singleton n'est toujours pas chargé ...");
+        System.out.println("Bon allez, je me décide à l'appeler ...");
+        LazySingleton singleton = LazySingleton.getInstance();
+        System.out.println("Et maintenant je l'affiche ...");
+        System.out.println(singleton);
+        LazySingleton singleton2 = LazySingleton.getInstance();
+        System.out.println("Et maintenant je l'affiche ...");
+        System.out.println(singleton2);
+        
+        System.out.println("DataBaseConnection");
+        DataBaseConnection singleton3 = DataBaseConnection.getDb();
+        System.out.println("Et maintenant je l'affiche ...");
+        System.out.println(singleton3);
+        DataBaseConnection singleton4 = DataBaseConnection.getDb();
+        System.out.println("Et maintenant je l'affiche ...");
+        System.out.println(singleton4);
+		
+        
+		
 		
 		MainHopital mh = new MainHopital();
 		List<Infirmier> infirmiers = mh.retrieveInfirmiers();
+		
+		
+		
+		
 	
 		
 		
@@ -137,11 +164,18 @@ public class MainHopital {
 				"vertiges, nausées", "pollen");
 		// pour ajouter à la liste des médicaments
 		medicaments.add(medicament3.getNom() + "-> " + medicament3.getAllergie());
+		
+		
+		//ajout des médicaments à database
+		mh.createMedicament(medicament1);
+		mh.createMedicament(medicament2);
+		mh.createMedicament(medicament3);
+		
 
 		// Ajout des médicaments au tableauMedicaments
 		tableauMedicaments[0] = medicament1;
-		tableauMedicaments[1] = medicament2;
-		tableauMedicaments[2] = medicament3;
+		//tableauMedicaments[1] = medicament2;
+		//tableauMedicaments[2] = medicament3;
 
 		// affichage du tableau des médicaments
 		System.out.println("Tableau des médicaments");
@@ -217,11 +251,12 @@ public class MainHopital {
 		Infirmier infirmier4 = new Infirmier(4, "Diaz", "Henri", "rue des Martines 15", "12.04.1993", "0794786523", "hdiaz@gmail.com", "Pédiatrie");
 		Infirmier infirmier5 = new Infirmier(5, "Lopez", "Charles", "rue des Bains 22", "12.02.1965", "0797653465", "clopez@gmail.com", "Ophtalmologie");
 		
+		
 		mh.createInfirmier(infirmier4);
 		mh.createInfirmier(infirmier5);
 		mh.updateInfirmier(infirmier5);
 		mh.deleteInfirmier(infirmier4);
-		//retrieve l0infirmier qui a l'ID 3 dans la database
+		//retrieve l'infirmier qui a l'ID 3 dans la database
 		mh.retrieveInfirmierUnique(3);
 		
 		
@@ -335,6 +370,31 @@ public class MainHopital {
 		Lit lit19 = new Lit(19, false, true, false);
 		Lit lit20 = new Lit(20, true, true, false);
 		Lit lit21 = new Lit(21, true, false, false);
+		
+		
+		/*
+		mh.createLit(lit01);
+		mh.createLit(lit02);
+		mh.createLit(lit03);
+		mh.createLit(lit04);
+		mh.createLit(lit05);
+		mh.createLit(lit06);
+		mh.createLit(lit07);
+		mh.createLit(lit08);
+		mh.createLit(lit09);
+		mh.createLit(lit10);
+		mh.createLit(lit11);
+		mh.createLit(lit12);
+		mh.createLit(lit13);
+		mh.createLit(lit14);
+		mh.createLit(lit15);
+		mh.createLit(lit16);
+		mh.createLit(lit17);
+		mh.createLit(lit18);
+		mh.createLit(lit19);
+		mh.createLit(lit20);
+		mh.createLit(lit21);
+		*/
 
 		// ajout des instances Lit à la liste lstLits
 		lstLits.add(lit01);
@@ -766,7 +826,8 @@ public class MainHopital {
         				
 
 	}
-	//méthode pour insérer dans database
+	
+	//méthode pour insérer Infirmier dans database
 	private boolean createInfirmier(Infirmier infirmier) {
 		//variables
 		Connection connection;
@@ -807,7 +868,92 @@ public class MainHopital {
 		return resultat;
         				
 
-	}// méthode pour retriever de la database un infirmier unique
+	}
+
+	//méthode pour insérer médicament dans database
+		private boolean createMedicament(Medicament medicament) {
+			//variables
+			Connection connection;
+			ResultSet rs = null;
+			Statement stmt = null;
+			boolean resultat = false;
+			
+			if (medicament == null) {
+				return resultat;
+			}
+			
+			try {
+				// pour interagir avec la base de données
+				Class.forName("com.mysql.cj.jdbc.Driver");
+	            connection = DriverManager.getConnection("jdbc:mysql://localhost/Hopital?user=javauser" + "&password=javapass");         
+	            stmt = connection.createStatement();
+	            
+	            String sqlString = "INSERT INTO Hopital.tblMedicament (nom, composition, formeGalenique, effetSecondaire, allergie) " + 
+	        			"VALUES ('" + medicament.getNom() + "', '" +
+	        			medicament.getComposition() + "', '" +
+	        			medicament.getFormeGalenique() + "', '" +
+	        			medicament.getEffetSecondaire() + "', '" +
+	        			medicament.getAllergie() + "', '" ;
+	            
+				int nbrModifs = stmt.executeUpdate(sqlString);
+	            resultat = nbrModifs < 0 ? true : false;
+	        			
+	           
+	            stmt.close();
+	            
+	        } catch (Exception ex) {
+	        	ex.printStackTrace();
+	            
+	        } 
+			
+			return resultat;
+	        				
+
+		}	
+		
+/*	
+		//méthode pour insérer lit dans database
+				private boolean createLit(Lit lit) {
+					//variables
+					Connection connection;
+					ResultSet rs = null;
+					Statement stmt = null;
+					boolean resultat = false;
+					
+					if (lit == null) {
+						return resultat;
+					}
+					
+					try {
+						// pour interagir avec la base de données
+						Class.forName("com.mysql.cj.jdbc.Driver");
+			            connection = DriverManager.getConnection("jdbc:mysql://localhost/Hopital?user=javauser" + "&password=javapass");         
+			            stmt = connection.createStatement();
+			            
+			            String sqlString = "INSERT INTO Hopital.tblLits (no, medicalise, barriere, enfant) " + 
+			        			"VALUES ('" + lit.getNo() + "', '" +
+			        			lit.isMedicalise() + "', '" +
+			        			lit.isBarriere() + "', '" +
+			        			lit.isEnfant() + "', '" ;
+			            
+						int nbrModifs = stmt.executeUpdate(sqlString);
+			            resultat = nbrModifs < 0 ? true : false;
+			        			
+			           
+			            stmt.close();
+			            
+			        } catch (Exception ex) {
+			        	ex.printStackTrace();
+			            
+			        } 
+					
+					return resultat;
+			        				
+
+				}		
+*/
+	
+// méthode pour retriever de la database un infirmier unique
 private Infirmier retrieveInfirmierUnique(int noInfirmier) {
 		
 		Connection connection;
@@ -846,9 +992,6 @@ private Infirmier retrieveInfirmierUnique(int noInfirmier) {
             	lstInfirmierUnique.add(inf);
             	
              }
- 
-       	
-            System.out.println("-----------------------------------------");
       
             System.out.println("-----------------------------------------");
             
@@ -935,6 +1078,8 @@ private Infirmier retrieveInfirmierUnique(int noInfirmier) {
 		
 		
 	}
+	
+	
 	
 	// méthode pour trouver dans quelle chambre se trouve un lit
 	// avec en premier argument le dictionnaire et en deuxième le numéro de lit
