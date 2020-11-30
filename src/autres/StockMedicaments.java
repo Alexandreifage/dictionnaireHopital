@@ -28,18 +28,16 @@ public class StockMedicaments {
 		}
 	}
 
-	// pour enlever un Medicament de StockMedicament (j'ai du changer en static)
-	public  Medicament removeMedicament(Medicament medic) throws PatientException {
-		int position = -1;
-		for (Medicament med : listeMedicaments) {
-			position += 1;
+	// pour enlever un Medicament de StockMedicament 
+	public void removeMedicament(Medicament medic) {
+		for (Medicament med : listeMedicaments) {			
 			if (med.getNo() == medic.getNo()) {
-				return listeMedicaments.remove(position);
+				System.out.println("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+				System.out.println(medic.getNo());
+				listeMedicaments.remove(med);
 			}
 		}
-	// return listeMedicaments.remove(medic);
-	// return un oui non si ça c'est bien passé ou non
-		throw new PatientException("Médicament introuvable");
+	
 	}
 	// nombre de médicament qui restent dans la liste
 	// j'ai du changer en static
